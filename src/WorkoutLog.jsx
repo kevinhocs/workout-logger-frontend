@@ -130,7 +130,8 @@ export default function WorkoutLog() {
     const weightInLbs = unit === "kg" ? round1(toLbs(inputWeight)) : inputWeight;
 
     const payload = {
-      ...form,
+      date: form.date,
+      exercise: form.exercise,
       reps: Number(form.reps),
       sets: Number(form.sets),
       weight: weightInLbs,
