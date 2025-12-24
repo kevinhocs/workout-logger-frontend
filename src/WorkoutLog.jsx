@@ -52,19 +52,19 @@ export default function WorkoutLog() {
     }
 
     // Required fields
-    if (!form.exercise.trim()) errors.exercise = "Exercise selection is required!";
-    if (!form.weight.trim()) errors.weight = "Weight value is required!";
-    if (!form.reps.trim()) errors.reps = "Reps value is required!";
-    if (!form.sets.trim()) errors.sets = "Sets value is required!";
+    if (!form.exercise === "") errors.exercise = "Exercise selection is required!";
+    if (!form.weight === "") errors.weight = "Weight value is required!";
+    if (!form.reps === "") errors.reps = "Reps value is required!";
+    if (!form.sets === "") errors.sets = "Sets value is required!";
 
     // Numeric checks
-    if (form.weight.trim() && !/^\d+(\.\d+)?$/.test(form.weight)) {
+    if (form.weight !== "" && !/^\d+(\.\d+)?$/.test(form.weight)) {
       errors.weight = "Weight must be a positive number (decimals allowed)";
     }
-    if (form.reps.trim() && !/^\d+$/.test(form.reps)) {
+    if (form.reps !== "" && !/^\d+$/.test(form.reps)) {
       errors.reps = "Reps must be a positive whole number.";
     }
-    if (form.sets.trim() && !/^\d+$/.test(form.sets)) {
+    if (form.sets !== "" && !/^\d+$/.test(form.sets)) {
       errors.sets = "Sets must be a positive whole number.";
     }
 
@@ -102,7 +102,7 @@ export default function WorkoutLog() {
   const toggleWeightUnit = () => {
     const currentWeight = Number(form.weight);
     if (!Number.isFinite(currentWeight)) {
-      // No numeric weight entered — just flip the unit label
+      // No numeric weight entered, just flip the unit label
       setUnit((u) => (u === "lbs" ? "kg" : "lbs"));
       return;
     }
