@@ -137,40 +137,54 @@ export default function WorkoutLog() {
       weight: weightInLbs,
     };
 
-    if (editingLog) {
-      // EDIT existing log
-      const res = await fetch(`http://localhost:3000/logs/${editingLog.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    try {
+      let res;
 
-      const updated = await res.json();
-      setLogs((logs) => logs.map((log) => (log.id === updated.id ? updated : log)));
+      if (editingLog) {
+        // UPDATE
+        res = await fetch(`http://localhost:3000/logs/${editingLog.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        // CREATE
+        res = await fetch("http://localhost:3000/logs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      if (!res.ok) {
+        throw new Error(`Submit failed with status ${res.status}`);
+      }
+
+      await fetchLogs();
       setEditingLog(null);
-    } else {
-      // CREATE new log
-      await fetch("http://localhost:3000/logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      fetchLogs(); // refresh list
+      setForm({ date: "", exercise: "", weight: "", reps: "", sets: "", notes: "" });
+      setUnit("lbs");
+    } catch (err) {
+      console.error("Error submitting log:", err);
+      alert("Failed to save workout. Server may be unavailable.");
     }
-
-    // Reset form
-    setForm({ date: "", exercise: "", weight: "", reps: "", sets: "", notes: "" });
-    setUnit("lbs");
   };
 
   // --- Delete handler ---
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:3000/logs/${id}`, { method: "DELETE" });
-    setLogs((prev) => prev.filter((log) => log.id !== id));
+    try {
+      const res = await fetch(`http://localhost:3000/logs/${id}`, {
+        method: "DELETE",
+      });
 
-    if (editingLog && editingLog.id === id) {
-      setEditingLog(null);
-      setForm({ date: "", exercise: "", weight: "", reps: "", sets: "", notes: "" });
+      if (!res.ok) {
+        throw new Error("Failed to delete log");
+      }
+
+      setLogs((logs) => logs.filter((log) => log.id !== id));
+    } catch (err) {
+      console.error("Error deleting log:", err);
+      alert("Failed to delete log. Server might be down.");
     }
   };
 
