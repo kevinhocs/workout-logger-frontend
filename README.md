@@ -1,21 +1,7 @@
-# Workout Logger
+# Archived Repository
 
-A React-based workout logging app with unit conversion (lbs/kg), validation, and CRUD functionality.
+This project has been merged into a single full-stack repository:
 
-## Features
-- Log workouts with date, exercise, weight, reps, sets, and notes
-- Toggle between lbs and kg (auto conversion)
-- Edit and delete logged workouts
-- Date validation (no future dates)
-- Accessible form validation
+👉 https://github.com/kevinhocs/workout-logger
 
-## Tech Stack
-- React
-- Vite
-- Fetch API
-- JSON server (or backend API)
-
-## How to Run
-```bash
-npm install
-npm run dev
+This repository is archived and no longer maintained.
